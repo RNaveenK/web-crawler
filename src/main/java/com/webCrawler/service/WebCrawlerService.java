@@ -9,6 +9,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +18,13 @@ public class WebCrawlerService {
 
 	private Set<String> urls = new HashSet<>();
 	private static final int MAX_DEPTH = 3;
+	private static Logger log=LoggerFactory.getLogger(WebCrawlerService.class);
 
+	/**
+	 * @param webUrl
+	 * @param depth
+	 * @return
+	 */
 	public Set<String> getWebUrls(String webUrl, Integer depth) {
 		System.out.println("Crawling : [" + webUrl + "]");
 		if (!urls.contains(webUrl) && (depth < MAX_DEPTH)) {
@@ -43,10 +51,13 @@ public class WebCrawlerService {
 
 	}
 
+	/**
+	 * @param search
+	 * @return
+	 */
 	public Set<String> searcUrl(String search) {
 		if (urls.isEmpty())
 			return new HashSet<>();
-		
 		return urls.parallelStream().filter(s -> s.contains(search)).collect(Collectors.toSet());
 	}
 
